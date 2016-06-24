@@ -1,0 +1,2 @@
+rm -fr ~/data/mongod.lock
+mongod -f mongod.conf
