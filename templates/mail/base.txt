@@ -1,0 +1,5 @@
+{% block body %}{% endblock %}
+
+---
+The Flaskbook Team
+http://www.example.com

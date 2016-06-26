@@ -1,0 +1,9 @@
+{% extends "mail/base.html" %}
+
+{% block body %}
+<p>Hi {{ user.first_name }} and thanks for registering in Flaskbook!</p>
+
+<p>To confirm your registration, please click on this link: </br>
+http://example.com/confirm/user
+</p>
+{% endblock %}

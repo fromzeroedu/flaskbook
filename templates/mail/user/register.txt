@@ -1,0 +1,8 @@
+{% extends "mail/base.txt" %}
+
+{% block body %}
+Hi {{ user.first_name }} and thanks for registering in Flaskbook!
+
+To confirm your registration, please click on this link:
+http://example.com/confirm/user
+{% endblock %}
