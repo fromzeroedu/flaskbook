@@ -1,8 +1,8 @@
 {% extends "mail/base.txt" %}
 
 {% block body %}
-Hi {{ user.first_name }} and thanks for registering in Flaskbook!
+We have received a request to change your email.
 
-To confirm your registration, please click on this link:
+To confirm this request, please click on this link:
 {{ config.HOSTNAME }}/confirm/{{ user.username }}/{{ user.change_configuration.confirmation_code }}
 {% endblock %}

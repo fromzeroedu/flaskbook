@@ -1,0 +1,4 @@
+SECRET_KEY = 'you-will-never-guess'
+DEBUG=True
+MONGODB_DB = 'flaskbook'
+HOSTNAME = 'https://yourapp-youruser.c9users.io'
