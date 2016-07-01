@@ -192,3 +192,33 @@ def password_reset(username, code):
 @user_app.route('/password_reset_complete')
 def password_reset_complete():
     return render_template('user/password_change_confirmed.html')
+    
+@user_app.route('/change_password', methods=('GET', 'POST'))
+def change_password():
+    require_current = True
+    error = None
+    form = PasswordResetForm()
+    
+    user = User.objects.filter(username=session.get('username')).first()
+    
+    if not user:
+        abort(404)
+        
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            if bcrypt.hashpw(form.current_password.data, user.password) == user.password:
+                salt = bcrypt.gensalt()
+                hashed_password = bcrypt.hashpw(form.password.data, salt)
+                user.password = hashed_password
+                user.save()
+                # if user is logged in, log him out
+                if session.get('username'):
+                    session.pop('username')
+                return redirect(url_for('user_app.password_reset_complete'))
+            else:
+                error = "Incorrect password"
+    return render_template('user/password_reset.html',
+        form=form,
+        require_current=require_current,
+        error=error
+    )

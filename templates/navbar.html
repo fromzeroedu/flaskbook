@@ -8,8 +8,15 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 {% if session.username %}
-                <li>
-                    <p class="navbar-text">Welcome, <a href="#" class="navbar-link">{{ session.username }}</a></p>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                      @{{ session.username }} <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('user_app.profile', username=session.username) }}">View profile</a></li>
+                        <li><a href="{{ url_for('user_app.edit') }}">Edit profile</a></li>
+                        <li><a href="{{ url_for('user_app.change_password') }}">Change password</a></li>
+                    </ul>
                 </li>
                 <li>
                     <a href="{{ url_for('user_app.logout') }}" class="navbar-link">Logout</a></p>
