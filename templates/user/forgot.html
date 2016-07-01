@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+
+{% block title %}Forgot password{% endblock %}
+
+{% block content %}
+
+{% include "navbar.html" %}
+
+<div class="row">
+
+  <div class="col-md-offset-3 col-md-6">
+    
+    <h3>Forgot password</h3>
+    
+    <p>Please enter your email address and we will send a password reset link to your email.</p>
+
+    {% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% endif %}
+    
+    {% if message %}
+    <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endif %}
+
+    {% from "_formhelpers.html" import render_field %}
+    <form method="POST" action="{{ url_for('.forgot')}}" role="form">
+
+      {{ form.hidden_tag() }}
+
+      {{ render_field(form.email, class='form-control') }}
+
+      <button type="submit" class="btn btn-default">Reset password</button>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

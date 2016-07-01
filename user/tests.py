@@ -159,3 +159,46 @@ class UserTest(unittest.TestCase):
         # get a 404
         rv = self.app.get('/noexist')
         assert rv.status_code == 404
+        
+    def test_forgot_password(self):
+        # create a user
+        self.app.post('/register', data=self.user_dict())
+        
+        # confirm the user
+        user = User.objects.get(username=self.user_dict()['username'])
+        code = user.change_configuration.get('confirmation_code')
+        rv = self.app.get('/confirm/' + user.username + '/' + code)
+        
+        # enter user forgot email
+        rv = self.app.post('/forgot', data=dict(email=self.user_dict().get('email')))
+        user = User.objects.first()
+        password_reset_code = user.change_configuration.get('password_reset_code')
+        assert password_reset_code is not None
+        
+        # try wrong username
+        rv = self.app.get('/password_reset/not_there/' + password_reset_code)
+        assert rv.status_code == 404
+        
+        # try wrong password reset code
+        rv = self.app.get('/password_reset/' + self.user_dict().get('username') + '/bad-code')
+        assert rv.status_code == 404
+        
+        # do right password reset code
+        rv = self.app.post('/password_reset/' +self.user_dict().get('username') + '/' + password_reset_code, 
+        data=dict(password='newpassword', confirm='newpassword'), follow_redirects=True)
+        assert "Your password has been updated" in str(rv.data)
+        user = User.objects.first()
+        assert user.change_configuration == {}
+        
+        # try logging in with new password
+        rv = self.app.post('/login', data=dict(
+            username=self.user_dict()['username'],
+            password='newpassword'
+            ))
+        # check the session is set
+        with self.app as c:
+            rv = c.get('/')
+            assert session.get('username') == self.user_dict()['username']
+
+
+        
