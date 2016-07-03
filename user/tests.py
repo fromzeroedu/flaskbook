@@ -47,8 +47,8 @@ class UserTest(unittest.TestCase):
         
         # Is username being saved in lowercase?
         user3 = self.user_dict()
-        user2['username'] = "TestUser"
-        user2['email'] = "test2@example.com"
+        user3['username'] = "TestUser"
+        user3['email'] = "test2@example.com"
         rv = self.app.post('/register', data=user3, follow_redirects=True)
         assert User.objects.filter(username=user3['username'].lower()).count() == 1
         
