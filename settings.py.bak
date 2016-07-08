@@ -2,3 +2,5 @@ SECRET_KEY = 'you-will-never-guess'
 DEBUG=True
 MONGODB_DB = 'flaskbook'
 HOSTNAME = 'https://yourapp-youruser.c9users.io'
+UPLOAD_FOLDER = '/home/ubuntu/workspace/flaskbook/static/images'
+STATIC_IMAGE_URL = 'images'
