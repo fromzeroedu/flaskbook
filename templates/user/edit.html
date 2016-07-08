@@ -27,7 +27,7 @@
       
       {% if user.profile_image %}
       <div class="thumbnail">
-        <img src="{{ url_for('static', filename=user.profile_imgsrc('xlg')) }}" class="img-rounded">
+        <img src="{{ user.profile_imgsrc('xlg') }}" class="img-rounded">
       </div>
       {% endif %}
       
