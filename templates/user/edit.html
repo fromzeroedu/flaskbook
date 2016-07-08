@@ -21,9 +21,17 @@
     {% endif %}
     
     {% from "_formhelpers.html" import render_field %}
-    <form method="POST" action="{{ url_for('.edit')}}" role="form">
+    <form method="POST" action="{{ url_for('.edit')}}" role="form" enctype="multipart/form-data">
 
       {{ form.hidden_tag() }}
+      
+      {% if user.profile_image %}
+      <div class="thumbnail">
+        <img src="{{ url_for('static', filename=user.profile_imgsrc('xlg')) }}" class="img-rounded">
+      </div>
+      {% endif %}
+      
+      {{ render_field(form.image, class='form-control') }}
 
       {{ render_field(form.first_name, class='form-control') }}
       {{ render_field(form.last_name, class='form-control') }}
