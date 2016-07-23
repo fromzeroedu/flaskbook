@@ -9,6 +9,7 @@ from user.forms import RegisterForm, LoginForm, EditForm, ForgotForm, PasswordRe
 from utilities.common import email
 from settings import UPLOAD_FOLDER
 from utilities.imaging import thumbnail_process
+from relationship.models import Relationship
 
 user_app = Blueprint('user_app', __name__)
     
@@ -75,11 +76,15 @@ def logout():
 @user_app.route('/<username>', methods=('GET', 'POST'))
 def profile(username):
     edit_profile = False
+    rel = None
     user = User.objects.filter(username=username).first()
     if user and session.get('username') and user.username == session.get('username'):
         edit_profile = True
     if user:
-        return render_template('user/profile.html', user=user, edit_profile=edit_profile)
+        if session.get('username'):
+            logged_user = User.objects.filter(username=session.get('username')).first()
+            rel = Relationship.get_relationship(logged_user, user)
+        return render_template('user/profile.html', user=user, rel=rel, edit_profile=edit_profile)
     else:
         abort(404)
         
