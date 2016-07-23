@@ -42,6 +42,15 @@ class Relationship(db.Document):
                 return "FRIENDS_APPROVED"
         elif rel and rel.rel_type == Relationship.BLOCKED:
             return "BLOCKED"
+        else:
+            reverse_rel = Relationship.objects.filter(
+                from_user=to_user,
+                to_user=from_user
+                ).first()
+            if reverse_rel and reverse_rel.rel_type == Relationship.FRIENDS:
+                if reverse_rel.status == Relationship.PENDING:
+                    return "REVERSE_FRIENDS_PENDING"
+            return None
 
     meta = {
         'indexes': [('from_user', 'to_user'), ('from_user', 'to_user', 'rel_type', 'status')]

@@ -33,7 +33,7 @@
           {% else %}
           
             {% if rel == None %}
-            <a href="{{ url_for('.edit') }}" role="button" class="btn btn-default">
+            <a href="{{ url_for('relationship_app.add_friend', to_username=user.username) }}" role="button" class="btn btn-default">
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Friend
             </a>  
             <a href="{{ url_for('.edit') }}" role="button" class="btn btn-default">
