@@ -50,6 +50,8 @@ class Relationship(db.Document):
             if reverse_rel and reverse_rel.rel_type == Relationship.FRIENDS:
                 if reverse_rel.status == Relationship.PENDING:
                     return "REVERSE_FRIENDS_PENDING"
+                elif reverse_rel and reverse_rel.rel_type == Relationship.BLOCKED:
+                    return "REVERSE_BLOCKED"
             return None
 
     meta = {
