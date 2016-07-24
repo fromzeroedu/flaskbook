@@ -1,0 +1,81 @@
+{% macro rel_button(rel, user) %}
+
+{% if rel == "SAME" %}
+    <a href="{{ url_for('.edit') }}" role="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+    Edit profile
+    </a>
+{% endif %}
+
+{% if rel == None %}
+<a href="{{ url_for('relationship_app.add_friend', to_username=user.username) }}" role="button" class="relationship-add-friend btn btn-default">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Friend
+</a>  
+<a href="{{ url_for('relationship_app.block', to_username=user.username) }}" role="button" class="btn btn-default">
+  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Block
+</a>  
+{% endif %}
+
+{% if rel == "BLOCKED" %}
+<a href="{{ url_for('relationship_app.unblock', to_username=user.username) }}" role="button" class="relationship-blocked btn btn-danger">
+  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <span id="relationship-label">Blocked</span>
+</a>
+{% endif %}
+
+{% if rel == "FRIENDS_APPROVED" %}
+<a href="{{ url_for('relationship_app.remove_friend', to_username=user.username) }}" role="button" class="relationship-friends btn btn-primary">
+  <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <span id="relationship-label">Friends</span>
+</a>
+{% endif %}
+
+{% if rel == "FRIENDS_PENDING" %}
+<a href="{{ url_for('relationship_app.remove_friend', to_username=user.username) }}" role="button" class="relationship-friends-requested btn btn-primary">
+  <span class="glyphicon glyphicon-user" aria-hidden="true"></span> <span id="relationship-label">Friendship Requested</span>
+</a>
+{% endif %}
+
+{% if rel == "REVERSE_FRIENDS_PENDING" %}
+<a href="{{ url_for('relationship_app.add_friend', to_username=user.username) }}" role="button" class="relationship-reverse-friends-requested btn btn-primary">
+  <span class="glyphicon glyphicon-user" aria-hidden="true"></span> <span id="relationship-label">Accept Friendship</span>
+</a>
+<a href="{{ url_for('relationship_app.remove_friend', to_username=user.username) }}" role="button" class="relationship-reverse-friends-cancel btn btn-default">
+  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <span id="relationship-label">Deny Friendship</span>
+</a>            
+{% endif %}
+
+{% if rel == "REVERSE_BLOCKED" %}
+  <a href="#" class="relationship-reverse-blocked"></a>
+{% endif %}
+{% endmacro %}
+
+{% macro rel_js() %}
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.relationship-friends').mouseover(function() {
+    $(this).find('.relationship-label').text('Unfriend');
+    $(this).attr("class", "btn btn-default");
+  }).mouseout(function(){
+    $(this).find('.relationship-label').text('Friends');
+    $(this).attr("class", "btn btn-primary");
+  });            
+});
+$(document).ready(function(){
+  $('.relationship-blocked').mouseover(function() {
+    $(this).find('.relationship-label').text('Unblock');
+    $(this).attr("class", "btn btn-default");
+  }).mouseout(function(){
+    $(this).find('.relationship-label').text('Blocked');
+    $(this).attr("class", "btn btn-danger");
+  });            
+});
+$(document).ready(function(){
+  $('.relationship-friends-requested').mouseover(function() {
+    $(this).find('.relationship-label').text('Cancel Friend Request');
+    $(this).attr("class", "btn btn-danger");
+  }).mouseout(function(){
+    $(this).find('.relationship-label').text('Friendship Requested');
+    $(this).attr("class", "btn btn-primary");
+  });            
+});
+</script>
+{% endmacro %}
