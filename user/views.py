@@ -74,7 +74,7 @@ def logout():
     session.pop('username')
     return redirect(url_for('user_app.login'))
 
-@user_app.route('/<username>/friends/<int:page>')
+@user_app.route('/<username>/friends/<int:page>', endpoint='profile-friends-page')
 @user_app.route('/<username>/friends', endpoint='profile-friends')    
 @user_app.route('/<username>')
 def profile(username, page=1):

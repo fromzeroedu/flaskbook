@@ -1,0 +1,8 @@
+{% extends "mail/base.txt" %}
+
+{% block body %}
+Good news! {{ from_user.first_name }} {{ from_user.last_name }} wants to be your friend.
+
+To confirm this friendship, just visit {{ from_user.first_name }}'s profile:
+{{ config.HOSTNAME }}/{{ from_user.username }}
+{% endblock %}

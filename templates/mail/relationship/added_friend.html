@@ -1,0 +1,9 @@
+{% extends "mail/base.html" %}
+
+{% block body %}
+<p>Good news! {{ from_user.first_name }} {{ from_user.last_name }} wants to be your friend.</p>
+
+<p>To confirm this friendship, just visit {{ from_user.first_name }}'s profile:<br />
+{{ config.HOSTNAME }}/{{ from_user.username }}
+</p>
+{% endblock %}

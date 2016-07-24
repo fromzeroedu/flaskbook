@@ -97,7 +97,7 @@
           
           {% for friend in friends.items %}
           
-            <div class="col-md-3">
+            <div class="col-md-3 friend-grid-user">
               <div class="friend-grid-user-image">
                 <a class="img-thumbnail" href="{{ url_for('.profile', username=friend.to_user.username) }}">
                   <img src="{{ friend.to_user.profile_imgsrc('lg') }}" width="75" alt="{{ friend.to_user.username }}">
@@ -115,7 +115,27 @@
           {% endfor %}
           
         </div> <!-- row -->
+        
+      </div> <!-- col-md-12 -->
       
+      <div class="profile-friends-pagination col-md-12"> <!-- == Pagination == -->
+      
+        <div class="row">
+        
+          <div class="col-md-6 pull-left">
+          {% if friends.has_prev %}
+          <a role="button" class="btn btn-primary" href="{{ url_for('.profile-friends-page', username=user.username, page=friends.prev_num) }}">< Previous</a>
+          {% endif %}
+          </div> <!-- col-md-6 -->
+          
+          <div class="col-md-6 pull-right">
+          {% if friends.has_next %}
+          <a class="btn btn-primary" href="{{ url_for('.profile-friends-page', username=user.username, page=friends.next_num) }}">Next ></a>
+          {% endif %}
+          </div> <!-- col-md-6 -->
+          
+        </div> <!-- row -->
+
       </div>
       
       {% endif %}

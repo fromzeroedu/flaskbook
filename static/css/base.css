@@ -12,3 +12,12 @@
     margin-top: 2px;
     margin-bottom: 4px;   
 }
+
+.friend-grid-user {
+    margin-bottom: 15px;
+    height: 215px;
+}
+
+.profile-friends-pagination {
+    margin-top: 15px;
+}
