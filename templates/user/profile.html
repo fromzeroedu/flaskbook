@@ -12,10 +12,10 @@
 
   <div class="col-md-3">
 
-    <img class="img-thumbnail" src="//placehold.it/200x200" width="200" heigh="200" alt="{{ user.username }}">
+    <img class="img-thumbnail" src="{{ user.profile_imgsrc('xlg') }}" width="200" height="200" alt="{{ user.username }}">
 
-    <h3>{{ user.first_name }} {{ user.last_name }} </h3>
-    <h4><a href="{{ url_for('user_app.profile', username=user.username) }}" />@{{ user.username }}</a></h4>
+    <h3 class="profile-fullname">{{ user.first_name }} {{ user.last_name }}</h3>
+    <h3 class="profile-username"><a href="{{ url_for('user_app.profile', username=user.username) }}" />@{{ user.username }}</a></h3>
 
   </div> <!-- col-md-3 -->
   
@@ -80,6 +80,8 @@
     
     <div class="row">
       
+      {% if not friends_page %}
+      
       <div class="col-md-9">
         
         <div class="media">
@@ -110,37 +112,59 @@
         
       </div> <!-- col-md-9 -->
     
-      <div class="col-md-3">
+      <div class="col-md-3"> <!-- Friends side bar -->
 
-        <h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Friends <span class="badge">4</span></h4>
+        <h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+          <a href="{{ url_for('.profile-friends', username=user.username) }}">Friends</a>
+        <span class="badge">{{ friends_total }}</span></h4>
         
+        {% for friend in friends %}
         <div class="media">
           <div class="media-left">
-            <a href="#">
-              <img class="media-object" src="//placehold.it/50x50" width="50" heigh="50" alt="{{ user.username }}">
+            <a class="img-thumnbnail" href="{{ url_for('.profile', username=friend.to_user.username) }}">
+              <img class="media-object" src="{{ friend.to_user.profile_imgsrc('sm') }}" width="50" height="50" alt="{{ friend.to_user.username }}">
             </a>
           </div>
           <div class="media-body">
-            <p>Luis Escobar<br />
-              <a href="#">@luis</a>
+            <p>{{ friend.to_user.first_name }}<br />
+              <a href="{{ url_for('.profile', username=friend.to_user.username) }}">@{{ friend.to_user.username }}</a>
             </p>
           </div>
         </div> <!-- media -->
+        {% endfor %}
 
-        <div class="media">
-          <div class="media-left">
-            <a href="#">
-              <img class="media-object" src="//placehold.it/50x50" width="50" heigh="50" alt="{{ user.username }}">
-            </a>
-          </div>
-          <div class="media-body">
-            <p>Luis Escobar<br />
-              <a href="#">@luis</a>
-            </p>
-          </div>
-        </div> <!-- media -->
-
-      </div> <!-- col-md-3 -->
+      </div> <!-- Friends side bar -->
+      
+      {% else %}
+      
+      <div class="col-md-12"> <!-- == Friend list == -->
+      
+        <div class="row">
+          
+          {% for friend in friends.items %}
+          
+            <div class="col-md-3">
+              <div class="friend-grid-user-image">
+                <a class="img-thumbnail" href="{{ url_for('.profile', username=friend.to_user.username) }}">
+                  <img src="{{ friend.to_user.profile_imgsrc('lg') }}" width="75" alt="{{ friend.to_user.username }}">
+                </a>
+              </div>
+              <div class="friend-grid-user-data">
+                <h4 class="profile-fullname">{{ friend.to_user.first_name }} {{ friend.to_user.last_name }} </h5>
+                <h5 class="profile-username"><a href="{{ url_for('.profile', username=friend.to_user.username) }}">@{{ friend.to_user.username }}</a></h4>
+              </div>
+              <div class="friend-grid-user-friends-button">
+                {{ friend.is_friend(logged_user) }}
+              </div>
+            </div> <!-- col-md-3 -->
+            
+          {% endfor %}
+          
+        </div> <!-- row -->
+      
+      </div>
+      
+      {% endif %}
       
     </div> <!-- row -->
     

@@ -2,3 +2,13 @@
     height: 60px;
     margin-right: 5px;
 }
+
+.profile-fullname {
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+
+.profile-username {
+    margin-top: 2px;
+    margin-bottom: 4px;   
+}
