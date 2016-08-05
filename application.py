@@ -17,4 +17,7 @@ def create_app(**config_overrides):
     from relationship.views import relationship_app
     app.register_blueprint(relationship_app)
     
+    from feed.views import feed_app
+    app.register_blueprint(feed_app)
+    
     return app

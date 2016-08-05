@@ -38,6 +38,29 @@
       
       <div class="col-md-9">
         
+        {% if logged_user %}
+        <!-- post text input -->
+        <div class="row feed-message">
+          {% if error %}
+          <div class="alert alert-danger" role="alert">{{ error }}</div>
+          {% endif %}
+          
+          {% from "_formhelpers.html" import render_field %}
+          <form method="POST" action={{ url_for('feed_app.add_message') }} role="form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+              {{ form.post(class='form-control', rows=3) }}
+            </div>
+            
+            <input type="hidden" name="to_user" value="{{ user.username }}" />
+            <button type="submit" class="btn btn-primary pull-right">Post</button>
+          
+          </form>
+          </div> <!-- feed-message -->
+          <!-- post text input -->
+          {% endif %}
+        
         <div class="media">
           <div class="media-left">
             <a href="#">
