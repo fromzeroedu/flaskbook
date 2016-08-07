@@ -1,0 +1,18 @@
+{% macro render_feed_comment(comment) %}
+<div class="media">
+  <div class="media-left">
+    <a href="{{ url_for('user_app.profile', username=comment.from_user.username) }}">
+      <img class="media-object" src="{{ comment.from_user.profile_imgsrc('sm') }}" width="25" height="25" alt="{{ comment.from_user.username }}">
+    </a>
+  </div> <!-- media-left -->
+  <div class="media-body">
+    <div class="media-user-pane">
+      <span class="media-comment-user"><a href="{{ url_for('user_app.profile', username=comment.from_user.username) }}">{{ comment.from_user.first_name }} {{ comment.from_user.last_name }}</a></span>
+      <span class="media-comment-text">{{ comment.text_linkified|safe }}</span>
+    </div>
+    <div class="media-footer">
+      <span class="media-timestamp">{{ comment.human_timestamp }}</span>
+    </div> <!-- media-footer -->
+  </div> <!-- media-body -->
+</div> <!-- media -->
+{% endmacro %}

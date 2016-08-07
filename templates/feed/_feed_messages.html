@@ -1,10 +1,10 @@
 {% macro render_feed_message(message) %}
 <div class="media">
   <div class="media-left">
-    <a href="#">
+    <a href="{{ url_for('user_app.profile', username=message.from_user.username) }}">
       <img class="media-object" src="{{ message.from_user.profile_imgsrc('sm') }}" width="50" height="50" alt="{{ message.from_user.username }}">
     </a>
-  </div>
+  </div> <!-- media-left -->
   <div class="media-body">
     <div class="media-user-pane">
       <span class="media-user"><a href="{{ url_for('user_app.profile', username=message.from_user.username) }}">{{ message.from_user.first_name }} {{ message.from_user.last_name }}</a></span>
@@ -20,7 +20,12 @@
         {% endfor %}
       {% endif %}
     </div> <!-- media-images -->
-    <div class="media-footer">{{ message.human_timestamp }}</div>
+    <div class="media-footer">
+      <a href="{{ url_for('feed_app.message', message_id=message.id) }}" class="media-timestamp">
+        {{ message.human_timestamp }}
+      </a> - 
+      <a href="#">Comment</a>
+    </div>
   </div>
 </div> <!-- media -->
 {% endmacro %}

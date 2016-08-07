@@ -1,10 +1,10 @@
-from flask import Blueprint, request, session, redirect, url_for
+from flask import Blueprint, request, session, redirect, url_for, abort, render_template
 from werkzeug import secure_filename
 import os
 
 from user.decorators import login_required
 from user.models import User
-from feed.models import Message, Feed
+from feed.models import Message, Feed, POST, COMMENT
 from feed.process import process_message
 from feed.forms import FeedPostForm
 from settings import UPLOAD_FOLDER
@@ -43,6 +43,7 @@ def add_message():
             from_user=from_user,
             to_user=to_user,
             text=post,
+            message_type=POST,
             ).save()
             
         # store on the same user's feed
@@ -70,3 +71,33 @@ def add_message():
 
     else:
         return 'Error!'
+        
+@feed_app.route('/message/<message_id>', methods=('GET', 'POST'))
+def message(message_id):
+    form = FeedPostForm()
+    message = None
+    
+    message = Message.objects.filter(id=message_id).first()
+    if not message:
+        abort(404)
+        
+    if message and message.parent:
+        abort(404)
+        
+    if form.validate_on_submit() and session.get('username'):
+        # process post
+        from_user = User.objects.get(username=session.get('username'))
+        post = form.post.data
+        
+        # write the message
+        comment = Message(
+            from_user=from_user,
+            text=post,
+            message_type=COMMENT,
+            parent=message_id
+            ).save()
+            
+    return render_template('feed/message.html',
+        message=message,
+        form=form
+    )

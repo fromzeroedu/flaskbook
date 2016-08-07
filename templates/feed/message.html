@@ -1,0 +1,69 @@
+{% extends "base.html" %} 
+
+{% block title %}{{ message.text[:50] }} - Flaskbook{% endblock %} 
+
+{% block header %}<link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">{% endblock %}
+
+{% block content %} 
+
+{% include "navbar.html" %}
+
+<div class="row">
+
+  <div class="col-md-3">
+
+  </div> <!-- col-md-3 -->
+  
+  <div class="col-md-9">
+    
+    <div class="row">
+      
+      <div class="col-md-9">
+
+        <div class="row feed-message">          
+        {% from "feed/_feed_messages.html" import render_feed_message %}
+        {{ render_feed_message(message) }}
+        </div> <!-- row feed-message -->
+
+        <div class="row feed-message-comments">
+          <div class="col-md-offset-1 col-md-9">
+          {% from "feed/_feed_comments.html" import render_feed_comment %}
+          {% for comment in message.comments %}
+            {{ render_feed_comment(comment) }}
+          {% endfor %}   
+
+          </div> <!-- col-md-offset-1 col-md-9 -->
+        </div> <!-- row feed-message-comments -->
+
+        <!-- comment text input -->
+        <div class="row feed-comment">
+          {% if error %}
+          <div class="alert alert-danger" role="alert">{{ error }}</div>
+          {% endif %}
+      
+          {% from "_formhelpers.html" import render_field %}
+          <form method="POST" action="{{ url_for('feed_app.message', message_id=message.id)}}" role="form">
+      
+            {{ form.hidden_tag() }}
+      
+            <div class="form-group">
+              {{ form.post(class='form-control', rows=2) }}
+            </div>
+            
+            <input type="hidden" name="message_id" value="{{ message.id }}" />
+            <button type="submit" class="btn btn-primary pull-right">Comment</button>
+      
+          </form>
+        </div> <!-- row feed-comment -->
+        <!-- post text input -->
+        
+      </div> <!-- col-md-9 -->
+    
+      <div class="col-md-3"> 
+      
+      </div> <!-- col-md-3 -->
+    
+  </div> <!-- col-md-9 -->
+
+</div> <!-- row -->
+{% endblock %}
