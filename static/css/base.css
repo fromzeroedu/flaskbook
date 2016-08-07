@@ -21,3 +21,12 @@
 .profile-friends-pagination {
     margin-top: 15px;
 }
+
+.media-user {
+    font-size: large;
+}
+
+.media-footer {
+    font-size: 0.9em;
+    color: #aaa;
+}

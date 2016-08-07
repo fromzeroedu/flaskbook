@@ -3,7 +3,7 @@ import bcrypt
 import uuid
 import os
 from werkzeug import secure_filename
-from feed.forms import FeedPostForm
+from mongoengine import Q
 
 from user.models import User
 from user.forms import RegisterForm, LoginForm, EditForm, ForgotForm, PasswordResetForm
@@ -12,6 +12,8 @@ from settings import UPLOAD_FOLDER
 from utilities.imaging import thumbnail_process
 from relationship.models import Relationship
 from user.decorators import login_required
+from feed.forms import FeedPostForm
+from feed.models import Message
 
 user_app = Blueprint('user_app', __name__)
     
@@ -40,7 +42,7 @@ def register():
         email(user.email, "Welcome to Flaskbook", body_html, body_text)
         
         user.save()
-        return "User registered"
+        return redirect(url_for('home_app.home'))
     return render_template('user/register.html', form=form)
     
 @user_app.route('/login', methods=('GET', 'POST'))
@@ -63,7 +65,7 @@ def login():
                     session.pop('next')
                     return redirect(next)
                 else:
-                    return 'User logged in'
+                    return redirect(url_for('home_app.home'))
             else:
                 user = None
         if not user:
@@ -75,10 +77,10 @@ def logout():
     session.pop('username')
     return redirect(url_for('user_app.login'))
 
-@user_app.route('/<username>/friends/<int:page>', endpoint='profile-friends-page')
+@user_app.route('/<username>/friends/<int:friends_page_number>', endpoint='profile-friends-page')
 @user_app.route('/<username>/friends', endpoint='profile-friends')    
 @user_app.route('/<username>')
-def profile(username, page=1):
+def profile(username, friends_page_number=1):
     logged_user = None
     rel = None
     friends_page = False
@@ -99,11 +101,16 @@ def profile(username, page=1):
         
         if 'friends' in request.url:
             friends_page = True
-            friends = friends.paginate(page=page, per_page=3)
+            friends = friends.paginate(page=friends_page_number, per_page=3)
         else:
             friends = friends[:5]
         
         form = FeedPostForm()
+        
+        # get user messages
+        profile_messages = Message.objects.filter(
+            Q(from_user=user) | Q(to_user=user)
+            ).order_by('-create_date')[:10]
         
         return render_template('user/profile.html', 
             user=user, 
@@ -112,7 +119,8 @@ def profile(username, page=1):
             friends=friends,
             friends_total=friends_total,
             friends_page=friends_page,
-            form=form
+            form=form,
+            profile_messages=profile_messages
             )
     else:
         abort(404)

@@ -20,4 +20,7 @@ def create_app(**config_overrides):
     from feed.views import feed_app
     app.register_blueprint(feed_app)
     
+    from home.views import home_app
+    app.register_blueprint(home_app)
+    
     return app

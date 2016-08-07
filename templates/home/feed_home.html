@@ -1,0 +1,61 @@
+{% extends "base.html" %} 
+{% from "user/_rel_button.html" import rel_button, rel_js %}
+
+{% block title %}Home - Flaskbook{% endblock %} 
+
+{% block header %}<link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">{% endblock %}
+
+{% block content %} 
+
+{% include "navbar.html" %}
+
+<div class="row">
+
+  <div class="col-md-3">
+
+  </div> <!-- col-md-3 -->
+  
+  <div class="col-md-9">
+    
+    <div class="row">
+      
+      <div class="col-md-9"> <!-- == Posts == -->
+      
+        <!-- post text input -->
+        <div class="row feed-message">
+          {% if error %}
+          <div class="alert alert-danger" role="alert">{{ error }}</div>
+          {% endif %}
+      
+          {% from "_formhelpers.html" import render_field %}
+          <form method="POST" action="{{ url_for('feed_app.add_message')}}" role="form">
+      
+            {{ form.hidden_tag() }}
+      
+            <div class="form-group">
+              {{ form.post(class='form-control', rows=3) }}
+            </div>
+            
+            <input type="hidden" name="to_user" value="{{ user.username }}" />
+            <button type="submit" class="btn btn-primary pull-right">Post</button>
+      
+          </form>
+        </div>
+        <!-- post text input -->
+        {% from "feed/_feed_messages.html" import render_feed_message %}
+        {% for fm in feed_messages %}
+          {{ render_feed_message(fm.message) }}
+        {% endfor %}
+        
+        </div> <!-- row -->
+        
+      </div> <!-- col-md-9 -->
+    
+      <div class="col-md-3"> 
+      
+      </div> <!-- col-md-3 -->
+    
+  </div> <!-- col-md-9 -->
+
+</div> <!-- row -->
+{% endblock %}

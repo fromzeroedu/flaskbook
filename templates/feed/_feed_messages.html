@@ -1,0 +1,19 @@
+{% macro render_feed_message(message) %}
+<div class="media">
+  <div class="media-left">
+    <a href="#">
+      <img class="media-object" src="{{ message.from_user.profile_imgsrc('sm') }}" width="50" height="50" alt="{{ message.from_user.username }}">
+    </a>
+  </div>
+  <div class="media-body">
+    <div class="media-user-pane">
+      <span class="media-user"><a href="{{ url_for('user_app.profile', username=message.from_user.username) }}">{{ message.from_user.first_name }} {{ message.from_user.last_name }}</a></span>
+      {% if message.to_user %}
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="media-user"><a href="{{ url_for('user_app.profile', username=message.to_user.username) }}">{{ message.to_user.first_name }} {{ message.to_user.last_name }}</a></span>
+      {% endif %}
+    </div>
+    <div class="media-text">{{ message.text_linkified|safe }}</div>
+    <div class="media-footer">{{ message.human_timestamp }}</div>
+  </div>
+</div> <!-- media -->
+{% endmacro %}

@@ -53,7 +53,10 @@ def add_friend(to_username):
                 body_html,
                 body_text)
             
-        return redirect(ref)
+        if ref:
+            return redirect(ref)
+        else:
+            return redirect(url_for('user_app.profile', username=to_user.username))
     else:
         abort(404)
         
@@ -74,7 +77,10 @@ def remove_friend(to_username):
             reverse_rel = Relationship.objects.filter(
                 from_user=to_user,
                 to_user=logged_user).delete()
-        return redirect(ref)
+        if ref:
+            return redirect(ref)
+        else:
+            return redirect(url_for('user_app.profile', username=to_user.username))
     else:
         abort(404)
 
@@ -102,7 +108,11 @@ def block(to_username):
             rel_type=Relationship.BLOCKED,
             status=Relationship.APPROVED
             ).save()
-        return redirect(ref)
+        if ref:
+            return redirect(ref)
+        else:
+            return redirect(url_for('user_app.profile', username=to_user.username))
+
     else:
         abort(404)
         
@@ -121,6 +131,10 @@ def unblock(to_username):
             rel = Relationship.objects.filter(
                 from_user=logged_user,
                 to_user=to_user).delete()
-        return redirect(ref)
+        if ref:
+            return redirect(ref)
+        else:
+            return redirect(url_for('user_app.profile', username=to_user.username))
+
     else:
         abort(404)
