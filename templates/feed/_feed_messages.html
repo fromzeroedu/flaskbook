@@ -13,6 +13,13 @@
       {% endif %}
     </div>
     <div class="media-text">{{ message.text_linkified|safe }}</div>
+    <div class="media-images">
+      {% if message.images %}
+        {% for image in message.images %}
+          <img class="img-thumbnail" src="{{ message.post_imgsrc(image.ts, 'xlg') }}" width="{{ image.w }}" height="200" alt="" />
+        {% endfor %}
+      {% endif %}
+    </div> <!-- media-images -->
     <div class="media-footer">{{ message.human_timestamp }}</div>
   </div>
 </div> <!-- media -->

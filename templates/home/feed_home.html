@@ -28,11 +28,12 @@
           {% endif %}
       
           {% from "_formhelpers.html" import render_field %}
-          <form method="POST" action="{{ url_for('feed_app.add_message')}}" role="form">
+          <form method="POST" action="{{ url_for('feed_app.add_message')}}" role="form" enctype="multipart/form-data">
       
             {{ form.hidden_tag() }}
       
             <div class="form-group">
+              {{ form.images(class='form-control') }}
               {{ form.post(class='form-control', rows=3) }}
             </div>
             
