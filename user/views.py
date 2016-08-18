@@ -13,7 +13,7 @@ from utilities.imaging import thumbnail_process
 from relationship.models import Relationship
 from user.decorators import login_required
 from feed.forms import FeedPostForm
-from feed.models import Message
+from feed.models import Message, POST
 
 user_app = Blueprint('user_app', __name__)
     
@@ -85,6 +85,7 @@ def profile(username, friends_page_number=1):
     rel = None
     friends_page = False
     user = User.objects.filter(username=username).first()
+    profile_messages = []
     
     if user:
         if session.get('username'):
@@ -107,10 +108,12 @@ def profile(username, friends_page_number=1):
         
         form = FeedPostForm()
         
-        # get user messages
-        profile_messages = Message.objects.filter(
-            Q(from_user=user) | Q(to_user=user)
-            ).order_by('-create_date')[:10]
+        # get user messages if friends or self
+        if logged_user and (rel == "SAME" or rel == "FRIENDS_APPROVED"):
+            profile_messages = Message.objects.filter(
+                Q(from_user=user) | Q(to_user=user),
+                message_type=POST
+                ).order_by('-create_date')[:10]
         
         return render_template('user/profile.html', 
             user=user, 
