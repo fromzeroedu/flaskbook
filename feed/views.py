@@ -29,7 +29,7 @@ def add_message():
                 file.save(file_path)
                 post_images.append(file_path)
                 
-        # pocess post
+        # process post
         from_user = User.objects.get(username=session.get('username'))
         to_user = User.objects.get(username=request.values.get('to_user'))
         post = form.post.data
@@ -67,7 +67,7 @@ def add_message():
         if ref:
             return redirect(ref)
         else:
-            return redirect(url_for('user_app.profile', username=from_user.username))
+            return redirect(url_for('home_app.home'))
 
     else:
         return 'Error!'

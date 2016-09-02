@@ -11,10 +11,12 @@ def process_message(message):
         status=Relationship.APPROVED
     )
     
+    # get the from_user's friends
     for friend in friends:
-        feed = Feed(
-            user=friend.to_user,
-            message=message
-        ).save()
-        
+        rel = Relationship.get_relationship(friend.to_user, message.to_user)
+        if rel != "BLOCKED":
+            feed = Feed(
+                user=friend.to_user,
+                message=message
+            ).save()
     return True
