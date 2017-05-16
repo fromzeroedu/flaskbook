@@ -22,8 +22,8 @@ class Relationship(db.Document):
         (APPROVED, 'Approved'),
         )
         
-    from_user = db.ReferenceField(User, db_field='fu', reversed_delete_rule=CASCADE)
-    to_user = db.ReferenceField(User, db_field='tu', reversed_delete_rule=CASCADE)
+    from_user = db.ReferenceField(User, db_field='fu', reverse_delete_rule=CASCADE)
+    to_user = db.ReferenceField(User, db_field='tu', reverse_delete_rule=CASCADE)
     rel_type = db.IntField(db_field='rt', choices=RELATIONSHIP_TYPE)
     status = db.IntField(db_field='s', choices=STATUS_TYPE)
     req_date = db.IntField(db_field='rd', default=now())
